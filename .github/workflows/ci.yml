@@ -1,0 +1,102 @@
+# Safar Share — CI (§15): format, vet, unit tests, integration tests on real
+# PostGIS + Redis, Next.js build, Android assemble. Integration tests need the
+# PostGIS image, so the job runs on a ubuntu runner with Docker.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  api:
+    name: API (go)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/api
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22.12"
+          cache-dependency-path: apps/api/go.sum
+
+      - name: gofmt
+        run: test -z "$(gofmt -l .)"
+
+      - name: go vet
+        run: go vet ./...
+
+      - name: build
+        run: go build ./...
+
+      - name: unit tests
+        run: go test -race -count=1 ./...
+
+      - name: integration tests (PostGIS + Redis)
+        env:
+          POSTGRES_USER: safar
+          POSTGRES_PASSWORD: safar
+          POSTGRES_DB: safar
+        run: go test -tags=integration -count=1 -timeout 10m ./internal/integration/...
+
+  web:
+    name: Web (Next.js)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+
+      - name: install
+        run: npm ci
+
+      - name: lint
+        run: npm run lint
+
+      - name: build
+        run: npm run build
+
+  android:
+    name: Android (Gradle)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/mobile-android
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: assemble debug
+        run: ./gradlew assembleDebug
+
+  openapi:
+    name: OpenAPI spec
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: validate
+        run: npx --yes @redocly/cli@latest lint docs/openapi.yaml --skip-rule no-unused-components

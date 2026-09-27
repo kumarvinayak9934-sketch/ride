@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Simple road + car glyph on the brand-blue background. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M30,58 L38,42 C39.5,39 42,37.5 45,37.5 L63,37.5 C66,37.5 68.5,39 70,42 L78,58 L78,68 C78,69.7 76.7,71 75,71 L71,71 L71,66 C71,64.3 69.7,63 68,63 L40,63 C38.3,63 37,64.3 37,66 L37,71 L33,71 C31.3,71 30,69.7 30,68 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M36,66 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M72,66 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M44,57 L64,57 L61.5,46 C61.1,44.7 60.2,44 58.8,44 L49.2,44 C47.8,44 46.9,44.7 46.5,46 Z" />
+</vector>
