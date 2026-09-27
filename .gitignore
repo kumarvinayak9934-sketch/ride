@@ -1,0 +1,37 @@
+# ---- dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# ---- builds
+apps/web/.next/
+apps/web/out/
+apps/web/dist/
+apps/api/bin/
+apps/api/server
+apps/api/coverage/
+apps/mobile-android/.gradle/
+apps/mobile-android/build/
+apps/mobile-android/app/build/
+apps/mobile-android/local.properties
+apps/mobile-ios/DerivedData/
+apps/mobile-ios/*.xcodeproj/xcuserdata/
+apps/mobile-ios/*.xcworkspace/xcuserdata/
+
+# ---- secrets / env
+.env
+.env.*
+!.env.example
+apps/api/.env
+
+# ---- misc
+*.log
+.DS_Store
+.idea/
+.vscode/
+*.zip
+coverage/
+
+# ---- test artifacts
+apps/web/playwright-report/
+apps/web/test-results/
